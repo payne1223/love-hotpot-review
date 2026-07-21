@@ -1,1 +1,424 @@
 
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>樂釜極上鍋物 - 美味拼裝</title>
+    <!-- 引入高質感字體 -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* 樂釜 CI 識別配色 */
+            --primary-gold: #C59B63;     /* 職人金 */
+            --bg-deep-black: #0A0A0A;   /* 深度黑底 */
+            --card-gray: #1E1E1E;       /* 卡片深灰 */
+            --text-pure-white: #FFFFFF; /* 純淨白字 */
+            --text-smoke-grey: #A0A0A0; /* 煙霧灰字 */
+            --success-green: #4CD964;    /* 成功綠 */
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Noto Sans TC', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-deep-black);
+            color: var(--text-pure-white);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 480px;
+            background: var(--card-gray);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.7);
+            border: 1px solid rgba(197, 155, 99, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        /* 首頁 Logo 區 */
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .header img {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            border: 2px solid var(--primary-gold);
+            margin-bottom: 12px;
+            object-fit: cover;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary-gold);
+            margin-bottom: 8px;
+            letter-spacing: 1.5px;
+        }
+
+        .header p {
+            font-size: 14px;
+            color: var(--text-smoke-grey);
+            font-weight: 400;
+        }
+
+        /* 拼裝題目區 */
+        .section-title {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: var(--primary-gold);
+            border-left: 4px solid var(--primary-gold);
+            padding-left: 10px;
+            letter-spacing: 1px;
+        }
+
+        .options-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 30px;
+        }
+
+        .option-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 14px;
+            padding: 18px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .option-card.selected {
+            background: rgba(197, 155, 99, 0.15);
+            border-color: var(--primary-gold);
+        }
+
+        /* 隱藏原生 Radio */
+        .option-card input[type="radio"] {
+            display: none;
+        }
+
+        .checkbox-custom {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--text-smoke-grey);
+            border-radius: 50%;
+            margin-right: 15px;
+            position: relative;
+            flex-shrink: 0;
+            transition: all 0.2s ease;
+        }
+
+        .option-card.selected .checkbox-custom {
+            border-color: var(--primary-gold);
+        }
+
+        .option-card.selected .checkbox-custom::after {
+            content: "";
+            width: 12px;
+            height: 12px;
+            background: var(--primary-gold);
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .option-text {
+            font-size: 15px;
+            line-height: 1.5;
+            font-weight: 400;
+        }
+
+        /* 預覽與提交區 */
+        .section-title.preview {
+            margin-top: 10px;
+            margin-bottom: 8px;
+        }
+
+        .preview-box {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px dashed rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 15px;
+            font-size: 14px;
+            color: var(--text-smoke-grey);
+            margin-bottom: 25px;
+            min-height: 60px;
+            line-height: 1.6;
+        }
+
+        .btn-submit {
+            background: var(--primary-gold);
+            color: var(--bg-deep-black);
+            width: 100%;
+            border: none;
+            padding: 18px;
+            border-radius: 14px;
+            font-size: 17px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 6px 20px rgba(197, 155, 99, 0.4);
+            transition: transform 0.1s ease;
+            letter-spacing: 1px;
+        }
+
+        .btn-submit:active {
+            transform: scale(0.97);
+        }
+
+        /* 加入 LINE 按鈕 (移至最下方) */
+        .btn-line-join {
+            display: block;
+            text-align: center;
+            margin-top: 25px;
+            font-size: 14px;
+            color: #00B900; /* LINE 綠 */
+            text-decoration: underline;
+            font-weight: 400;
+            cursor: pointer;
+        }
+
+        /* 彈窗（倒數 3 秒動畫） */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background: var(--card-gray);
+            border: 2px solid var(--primary-gold);
+            border-radius: 25px;
+            padding: 40px 30px;
+            max-width: 380px;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+
+        .success-icon {
+            font-size: 60px;
+            color: var(--success-green);
+            margin-bottom: 20px;
+        }
+
+        .modal-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: var(--primary-gold);
+        }
+
+        .modal-desc {
+            font-size: 15px;
+            color: var(--text-smoke-grey);
+            margin-bottom: 25px;
+            line-height: 1.6;
+        }
+
+        .countdown-num {
+            font-size: 40px;
+            font-weight: 700;
+            color: var(--primary-gold);
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <!-- 讀取 GitHub 上的 Logo 圖片 -->
+        <img src="image.png" alt="樂釜 Logo">
+        <h1>樂釜極上鍋物</h1>
+        <p>1秒勾選，拼裝你的樂釜專屬美味記憶</p>
+    </div>
+
+    <div id="puzzle-section">
+        <!-- 大題一 -->
+        <div class="section-title">今日吃了什麼美味？ (單選)</div>
+        <div class="options-group" id="group-food">
+            <label class="option-card selected">
+                <input type="radio" name="food" value="點了樂釜招牌的極上黑毛和牛，肉質真的沒話說，油花分布得像藝術品一樣，入口即化！" checked>
+                <span class="checkbox-custom"></span>
+                <span class="option-text">極上黑毛和牛（入口即化）</span>
+            </label>
+            <label class="option-card">
+                <input type="radio" name="food" value="這次點了極上蛤蜊和鮮蝦，海鮮盤一上來就看得出非常新鮮，蛤蜊顆顆飽滿肥美，海味十足。">
+                <span class="checkbox-custom"></span>
+                <span class="option-text">鮮活蛤蜊海鮮（飽滿肥美）</span>
+            </label>
+            <label class="option-card">
+                <input type="radio" name="food" value="點了頂級雪花牛搭配昆布高湯，肉片切得厚度剛剛好，汆燙幾秒後吃起來超多汁，大滿足！">
+                <span class="checkbox-custom"></span>
+                <span class="option-text">頂級雪花牛（肉厚多汁）</span>
+            </label>
+            <label class="option-card">
+                <input type="radio" name="food" value="今天吃和牛拼盤，肉質嫩又香，湯頭煮到後面超甘甜，完全沒失望！">
+                <span class="checkbox-custom"></span>
+                <span class="option-text">和牛美味拼盤（湯頭甘甜）</span>
+            </label>
+        </div>
+
+        <!-- 大題二 -->
+        <div class="section-title">最滿意的體驗是？ (單選)</div>
+        <div class="options-group" id="group-exp">
+            <label class="option-card selected">
+                <input type="radio" name="exp" value="而且服務人員態度非常親切，加湯很主動，整體用餐氣氛輕鬆舒服，很適合和家人聚餐。" checked>
+                <span class="checkbox-custom"></span>
+                <span class="option-text">服務貼心（親切、主動加湯）</span>
+            </label>
+            <label class="option-card">
+                <input type="radio" name="exp" value="店內裝潢非常有質感，環境整潔乾淨，就連醬料台都整理得一塵不染，細節細緻度給過！">
+                <span class="checkbox-custom"></span>
+                <span class="option-text">環境質感（乾淨整潔、無塵）</span>
+            </label>
+            <label class="option-card">
+                <input type="radio" name="exp" value="湯頭順口不口渴，自助區的蔬菜和附餐選擇也很有誠意，整體高 CP 值，絕對會再回訪。">
+                <span class="checkbox-custom"></span>
+                <span class="option-text">超高 CP 值（菜盤誠意、必回訪）</span>
+            </label>
+            <label class="option-card">
+                <input type="radio" name="exp" value="環境寬敞不擁擠，跟朋友邊吃邊聊天很自在，店家還貼心準備了冰淇淋，超讚。">
+                <span class="checkbox-custom"></span>
+                <span class="option-text">聚餐首選（環境自在、有冰淇淋）</span>
+            </label>
+        </div>
+
+        <!-- 動態拼裝預覽 -->
+        <div class="section-title preview">拼裝完成的文字預覽：</div>
+        <div class="preview-box" id="text-preview">
+            載入中...
+        </div>
+
+        <!-- 提交按鈕 -->
+        <button class="btn-submit" onclick="executePuzzleTransition()">
+            複製好評並前往 Google 評論
+        </button>
+    </div>
+
+    <!-- 加入 LINE 按鈕 (移至最下方) -->
+    <a href="https://line.me/R/ti/p/@YOUR_LINE_ID" class="btn-line-join" target="_blank">按此加入 LINE 好友累點</a>
+</div>
+
+<!-- 3秒過渡彈窗 -->
+<div class="modal-overlay" id="redirect-modal">
+    <div class="modal-content">
+        <div class="success-icon">✓</div>
+        <div class="modal-title">評價文字已複製！</div>
+        <div class="modal-desc">
+            我們已將您的專屬拼裝文字複製到剪貼簿中。<br><br>
+            <strong>跳轉後請「長按輸入框」選擇貼上即可送出！</strong>
+        </div>
+        <div class="countdown-num" id="countdown-timer">3</div>
+    </div>
+</div>
+
+<script>
+    // 請將這裡替換成樂釜的 Google 評論直跳網址
+    const GOOGLE_REVIEW_URL = "https://g.page/r/YOUR_GOOGLE_MAPS_REVIEW_ID/review";
+
+    // 處理 Radio 卡片的選取樣式與事件
+    document.querySelectorAll('.option-card').forEach(card => {
+        card.addEventListener('click', function(e) {
+            const input = this.querySelector('input');
+            const groupName = input.name;
+            
+            // 移除同群組其他 card 的 selected 樣式
+            document.querySelectorAll(`input[name="${groupName}"]`).forEach(radio => {
+                radio.closest('.option-card').classList.remove('selected');
+            });
+            
+            // 選取當前點擊的
+            input.checked = true;
+            this.classList.add('selected');
+            
+            updatePreview();
+        });
+    });
+
+    // 拼裝邏輯
+    function updatePreview() {
+        const foodText = document.querySelector('input[name="food"]:checked').value;
+        const expText = document.querySelector('input[name="exp"]:checked').value;
+        const fullText = `${foodText} ${expText}`;
+        document.getElementById('text-preview').innerText = fullText;
+    }
+
+    // 複製到剪貼簿（相容不同手機系統）
+    function copyToClipboard(text) {
+        if (navigator.clipboard && window.isSecureContext) {
+            return navigator.clipboard.writeText(text);
+        } else {
+            let textArea = document.createElement("textarea");
+            textArea.value = text;
+            textArea.style.position = "fixed";
+            textArea.style.left = "-999999px";
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            return new Promise((res, rej) => {
+                document.execCommand('copy') ? res() : rej();
+                textArea.remove();
+            });
+        }
+    }
+
+    // 執行複製、倒數與跳轉
+    function executePuzzleTransition() {
+        const fullText = document.getElementById('text-preview').innerText;
+        
+        copyToClipboard(fullText).then(() => {
+            const modal = document.getElementById('redirect-modal');
+            const timerEl = document.getElementById('countdown-timer');
+            modal.style.display = 'flex';
+            
+            let timeLeft = 3;
+            timerEl.innerText = timeLeft;
+            
+            const interval = setInterval(() => {
+                timeLeft--;
+                timerEl.innerText = timeLeft;
+                if (timeLeft <= 0) {
+                    clearInterval(interval);
+                    window.location.href = GOOGLE_REVIEW_URL;
+                }
+            }, 1000);
+        }).catch(err => {
+            alert('複製失敗，請手動複製網頁上的文字再行前往。');
+        });
+    }
+
+    // 頁面初始化
+    updatePreview();
+</script>
+
+</body>
+</html>
