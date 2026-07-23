@@ -274,7 +274,8 @@
 
         .detected-store {
             font-size: 11px;
-            color: var(--text-sub);
+            color: var(--accent-blue);
+            font-weight: 600;
             text-align: center;
             margin-top: 10px;
         }
@@ -369,7 +370,7 @@
                 <button class="btn-primary" onclick="copyAndRedirect()">
                     📋 複製評論並貼上至 Google
                 </button>
-                <div class="detected-store" id="storeName">喜歡這則評論嗎？歡迎幫我們複製並貼上至 Google 留下真實體驗～</div>
+                <div class="detected-store" id="storeName">📍 正在連線您所在的樂釜門市...</div>
             </div>
 
             <!-- Line 會員導流卡片 -->
@@ -384,17 +385,18 @@
     </div>
 
     <script>
-        // 直達各分店 Google「直接寫評論 (Direct Write Review)」網址
-        const STORES = {
-            'Shilin': { name: '樂釜極上鍋物 (芝山店)', url: 'https://www.google.com/maps/place/?q=place_id:ChIJS3-xxxx&action=write' },
-            'Sanchong': { name: '樂釜極上鍋物 (重新店)', url: 'https://www.google.com/maps/search/?api=1&query=樂釜極上鍋物+重新店' },
-            'Xinzhuang': { name: '樂釜極上鍋物 (新莊店)', url: 'https://www.google.com/maps/search/?api=1&query=樂釜極上鍋物+新莊店' },
-            'Banqiao': { name: '樂釜極上鍋物 (板橋店)', url: 'https://www.google.com/maps/search/?api=1&query=樂釜極上鍋物+板橋店' },
-            'Changhua': { name: '樂釜極上鍋物 (彰化店)', url: 'https://www.google.com/maps/search/?api=1&query=樂釜極上鍋物+彰化店' },
-            'Default': { name: '樂釜極上鍋物', url: 'https://www.google.com/maps/search/?api=1&query=樂釜極上鍋物' }
-        };
+        // 樂釜 7 大門市精準座標與 Google 評論網址對照表
+        const STORES = [
+            { name: '樂釜極上鍋物 (徐匯店)', lat: 25.08485, lng: 121.48201, url: 'https://www.google.com/maps/search/?api=1&query=樂釜極上鍋物+徐匯店' },
+            { name: '樂釜極上鍋物 (長榮店)', lat: 25.08812, lng: 121.46735, url: 'https://www.google.com/maps/search/?api=1&query=樂釜極上鍋物+長榮店' },
+            { name: '樂釜極上鍋物 (芝山店)', lat: 25.10265, lng: 121.52284, url: 'https://www.google.com/maps/search/?api=1&query=樂釜極上鍋物+芝山店' },
+            { name: '樂釜極上鍋物 (重新店)', lat: 25.06012, lng: 121.49653, url: 'https://www.google.com/maps/search/?api=1&query=樂釜極上鍋物+重新店' },
+            { name: '樂釜極上鍋物 (新莊店)', lat: 25.03482, lng: 121.45018, url: 'https://www.google.com/maps/search/?api=1&query=樂釜極上鍋物+新莊店' },
+            { name: '樂釜極上鍋物 (板橋店)', lat: 25.00971, lng: 121.46122, url: 'https://www.google.com/maps/search/?api=1&query=樂釜極上鍋物+板橋店' },
+            { name: '樂釜極上鍋物 (彰化店)', lat: 24.06821, lng: 120.53852, url: 'https://www.google.com/maps/search/?api=1&query=樂釜極上鍋物+彰化店' }
+        ];
 
-        let currentStoreUrl = STORES.Default.url;
+        let targetStore = STORES[0]; // 預設門市
 
         // 1. 動態生成評論文案
         function updateReview() {
@@ -415,47 +417,89 @@
             document.getElementById('reviewContent').innerText = randomText;
         }
 
-        // 2. 依位置判斷分店
-        async function detectLocation() {
+        // Haversine 距離公式計算 (單位：公里)
+        function getDistance(lat1, lon1, lat2, lon2) {
+            const R = 6371; 
+            const dLat = (lat2 - lat1) * Math.PI / 180;
+            const dLon = (lon2 - lon1) * Math.PI / 180;
+            const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                      Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+                      Math.sin(dLon / 2) * Math.sin(dLon / 2);
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+            return R * c; 
+        }
+
+        // 2. 自動抓取手機 GPS 位置並比對 7 家分店距離
+        function autoConnectStore() {
+            const storeElement = document.getElementById('storeName');
+
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        const userLat = position.coords.latitude;
+                        const userLng = position.coords.longitude;
+
+                        let minDistance = Infinity;
+                        let nearestStore = STORES[0];
+
+                        STORES.forEach(store => {
+                            const dist = getDistance(userLat, userLng, store.lat, store.lng);
+                            if (dist < minDistance) {
+                                minDistance = dist;
+                                nearestStore = store;
+                            }
+                        });
+
+                        targetStore = nearestStore;
+                        storeElement.innerText = `📍 已自動連線所在門市：${targetStore.name}`;
+                    },
+                    (error) => {
+                        fetchIPLocation();
+                    }
+                );
+            } else {
+                fetchIPLocation();
+            }
+        }
+
+        // 備用 IP 定位機制
+        async function fetchIPLocation() {
+            const storeElement = document.getElementById('storeName');
             try {
                 const response = await fetch('https://ipapi.co/json/');
                 const data = await response.json();
                 const city = (data.city || '').toLowerCase();
-                const region = (data.region || '').toLowerCase();
 
-                if (city.includes('changhua') || region.includes('changhua')) {
-                    currentStoreUrl = STORES.Changhua.url;
-                } else if (city.includes('banqiao')) {
-                    currentStoreUrl = STORES.Banqiao.url;
-                } else if (city.includes('xinzhuang')) {
-                    currentStoreUrl = STORES.Xinzhuang.url;
-                } else if (city.includes('sanchong')) {
-                    currentStoreUrl = STORES.Sanchong.url;
-                } else {
-                    currentStoreUrl = STORES.Default.url;
-                }
+                if (city.includes('changhua')) targetStore = STORES[6];
+                else if (city.includes('banqiao')) targetStore = STORES[5];
+                else if (city.includes('xinzhuang')) targetStore = STORES[4];
+                else if (city.includes('sanchong')) targetStore = STORES[3];
+                else if (city.includes('shilin')) targetStore = STORES[2];
+                else targetStore = STORES[0]; // 預設徐匯店
+
+                storeElement.innerText = `📍 已自動連線最近門市：${targetStore.name}`;
             } catch (e) {
-                currentStoreUrl = STORES.Default.url;
+                storeElement.innerText = `📍 已為您開啟樂釜 Google 評論`;
             }
         }
 
-        // 3. 一鍵複製並直達 Google 評論頁
+        // 3. 一鍵複製並直達對應門市 Google 評論頁
         function copyAndRedirect() {
             const text = document.getElementById('reviewContent').innerText;
             
             navigator.clipboard.writeText(text).then(() => {
-                alert('已為您複製評論！即將前往 Google 評論頁面，直接貼上即可～感謝您的支持！');
-                window.open(currentStoreUrl, '_blank');
+                alert(`已為您複製評論！即將跳轉至【${targetStore.name}】Google 評論頁面，直接貼上即可～感謝您的支持！`);
+                window.open(targetStore.url, '_blank');
             }).catch(err => {
-                alert('已為您準備好連結！請手動複製文字後前往貼上～');
-                window.open(currentStoreUrl, '_blank');
+                alert(`已為您準備好連結！即將跳轉至【${targetStore.name}】Google 評論頁面～`);
+                window.open(targetStore.url, '_blank');
             });
         }
 
         // 初始化
         window.onload = function() {
             updateReview();
-            detectLocation();
+            autoConnectStore();
         };
     </script>
 </body>
