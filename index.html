@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>樂釜極上鍋物</title>
+    <title>樂釜極上鍋物 - 專屬評論體驗</title>
     <style>
         :root {
             --primary-navy: #0F2537;       /* 樂釜沉穩深藍 */
@@ -14,6 +14,7 @@
             --text-title: #0F172A;
             --text-sub: #64748B;
             --border-default: #E2E8F0;
+            --line-green: #06C755;         /* Line 品牌綠 */
         }
 
         * {
@@ -42,13 +43,11 @@
             box-shadow: var(--card-shadow);
             overflow: hidden;
             border: 1px solid rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(10px);
         }
 
-        /* 頂部放大的品牌 Hero 視覺區塊 */
         .hero-banner {
             width: 100%;
-            height: 200px;
+            height: 180px;
             position: relative;
             background-color: var(--primary-navy);
             overflow: hidden;
@@ -58,21 +57,15 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
-            transition: transform 0.5s ease;
         }
 
-        .hero-banner:hover .hero-img {
-            transform: scale(1.03);
-        }
-
-        /* 主內容區塊 */
         .content {
             padding: 24px 24px 32px;
         }
 
         .header {
             text-align: center;
-            margin-bottom: 28px;
+            margin-bottom: 24px;
         }
 
         .brand-badge {
@@ -88,27 +81,24 @@
             margin-bottom: 12px;
         }
 
-        /* 樂釜 Logo 樣式 */
         .brand-logo {
             display: block;
-            max-width: 220px;
-            width: 75%;
+            max-width: 200px;
+            width: 70%;
             height: auto;
-            margin: 0 auto 10px auto;
+            margin: 0 auto 8px auto;
         }
 
         .subtitle {
             font-size: 13px;
             color: var(--text-sub);
-            letter-spacing: 0.2px;
         }
 
-        /* 問題區塊標題 */
         .section-title {
             font-size: 15px;
             font-weight: 700;
             color: var(--primary-navy);
-            margin: 24px 0 14px;
+            margin: 20px 0 12px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -117,36 +107,27 @@
         .section-title .hint {
             font-size: 11px;
             color: #94A3B8;
-            font-weight: 500;
             background: #F1F5F9;
             padding: 2px 8px;
             border-radius: 6px;
         }
 
-        /* 選項群組 */
         .option-group {
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 10px;
         }
 
-        /* 現代 UI 選項卡片 */
         .option-card {
-            position: relative;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 16px 18px;
-            border-radius: 16px;
+            padding: 14px 16px;
+            border-radius: 14px;
             border: 2px solid var(--border-default);
             background: #FFFFFF;
             cursor: pointer;
-            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .option-card:hover {
-            border-color: #CBD5E1;
-            transform: translateY(-1px);
+            transition: all 0.2s ease;
         }
 
         .option-card input[type="radio"] {
@@ -159,10 +140,9 @@
         }
 
         .main-label {
-            font-size: 15px;
+            font-size: 14px;
             font-weight: 700;
             color: var(--text-title);
-            margin-bottom: 2px;
         }
 
         .sub-label {
@@ -170,16 +150,14 @@
             color: var(--text-sub);
         }
 
-        /* 客製選取 Icon */
         .check-icon {
-            width: 22px;
-            height: 22px;
+            width: 20px;
+            height: 20px;
             border-radius: 50%;
             border: 2px solid #CBD5E1;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.2s ease;
         }
 
         .check-icon::after {
@@ -193,11 +171,9 @@
             transition: all 0.2s ease;
         }
 
-        /* 選中狀態樣式 (Active) */
         .option-card:has(input[type="radio"]:checked) {
             border-color: var(--accent-blue);
             background-color: var(--light-blue-bg);
-            box-shadow: 0 4px 12px rgba(30, 107, 255, 0.12);
         }
 
         .option-card input[type="radio"]:checked ~ .check-icon {
@@ -210,36 +186,125 @@
             transform: scale(1);
         }
 
-        .option-card input[type="radio"]:checked ~ .option-text .main-label {
-            color: var(--accent-blue);
+        /* 產生評論結果區塊 */
+        .result-box {
+            margin-top: 24px;
+            padding: 16px;
+            background: #F8FAFC;
+            border: 1.5px dashed #CBD5E1;
+            border-radius: 16px;
+        }
+
+        .result-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--primary-navy);
+            margin-bottom: 8px;
+        }
+
+        .review-text {
+            font-size: 14px;
+            color: #334155;
+            line-height: 1.6;
+            margin-bottom: 12px;
+            background: #FFFFFF;
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px solid var(--border-default);
+        }
+
+        /* 主要按鈕 */
+        .btn-primary {
+            width: 100%;
+            padding: 14px;
+            background: var(--accent-blue);
+            color: #FFFFFF;
+            border: none;
+            border-radius: 14px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(30, 107, 255, 0.25);
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+
+        .btn-primary:active {
+            transform: scale(0.98);
+        }
+
+        /* LINE 會員好禮卡片 */
+        .line-card {
+            margin-top: 20px;
+            padding: 16px;
+            background: linear-gradient(135deg, #E8F5E9 0%, #C8E6C9 100%);
+            border-radius: 16px;
+            border: 1px solid #A5D6A7;
+            text-align: center;
+        }
+
+        .line-title {
+            font-size: 14px;
+            font-weight: 800;
+            color: #1B5E20;
+            margin-bottom: 4px;
+        }
+
+        .line-desc {
+            font-size: 12px;
+            color: #2E7D32;
+            margin-bottom: 12px;
+        }
+
+        .btn-line {
+            width: 100%;
+            padding: 12px;
+            background: var(--line-green);
+            color: #FFFFFF;
+            border: none;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            box-shadow: 0 4px 10px rgba(6, 199, 85, 0.2);
+        }
+
+        .detected-store {
+            font-size: 11px;
+            color: var(--text-sub);
+            text-align: center;
+            margin-top: 10px;
         }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <!-- 頂部放大的情境大圖 (讀取你的 image.png) -->
         <div class="hero-banner">
             <img src="image.png" alt="樂釜美味視覺" class="hero-img">
         </div>
 
         <div class="content">
-            <!-- 品牌 Header 區塊 -->
             <div class="header">
                 <span class="brand-badge">Love Hotpot</span>
-                <!-- 💡 已精準對應你的 logo.jpg -->
                 <img src="logo.jpg" alt="樂釜極上鍋物 Logo" class="brand-logo">
-                <p class="subtitle">1秒勾選，拼裝你的樂釜專屬美味記憶</p>
+                <p class="subtitle">1秒勾選，生成專屬美味記憶</p>
             </div>
 
             <!-- 問題 1 -->
             <div class="section-title">
-                今日吃了什麼美味？
+                1. 今日吃了什麼美味？
                 <span class="hint">單選</span>
             </div>
             <div class="option-group">
                 <label class="option-card">
-                    <input type="radio" name="food" checked>
+                    <input type="radio" name="food" value="極上黑毛和牛" data-desc="肉質鮮嫩入口即化" checked onchange="updateReview()">
                     <div class="option-text">
                         <span class="main-label">極上黑毛和牛</span>
                         <span class="sub-label">入口即化</span>
@@ -248,7 +313,7 @@
                 </label>
                 
                 <label class="option-card">
-                    <input type="radio" name="food">
+                    <input type="radio" name="food" value="鮮活蛤蜊海鮮" data-desc="海鮮非常飽滿肥美又新鮮" onchange="updateReview()">
                     <div class="option-text">
                         <span class="main-label">鮮活蛤蜊海鮮</span>
                         <span class="sub-label">飽滿肥美</span>
@@ -257,7 +322,7 @@
                 </label>
 
                 <label class="option-card">
-                    <input type="radio" name="food">
+                    <input type="radio" name="food" value="頂級雪花牛" data-desc="份量紮實且肉厚多汁" onchange="updateReview()">
                     <div class="option-text">
                         <span class="main-label">頂級雪花牛</span>
                         <span class="sub-label">肉厚多汁</span>
@@ -266,7 +331,7 @@
                 </label>
 
                 <label class="option-card">
-                    <input type="radio" name="food">
+                    <input type="radio" name="food" value="和牛美味拼盤" data-desc="湯頭甘甜搭配肉品超讚" onchange="updateReview()">
                     <div class="option-text">
                         <span class="main-label">和牛美味拼盤</span>
                         <span class="sub-label">湯頭甘甜</span>
@@ -277,12 +342,12 @@
 
             <!-- 問題 2 -->
             <div class="section-title">
-                最滿意的體驗是？
+                2. 最滿意的體驗是？
                 <span class="hint">單選</span>
             </div>
             <div class="option-group">
                 <label class="option-card">
-                    <input type="radio" name="experience" checked>
+                    <input type="radio" name="exp" value="服務貼心" data-desc="店員親切且主動加湯服務超棒" checked onchange="updateReview()">
                     <div class="option-text">
                         <span class="main-label">服務貼心</span>
                         <span class="sub-label">親切、主動加湯</span>
@@ -291,7 +356,7 @@
                 </label>
 
                 <label class="option-card">
-                    <input type="radio" name="experience">
+                    <input type="radio" name="exp" value="環境質感" data-desc="用餐環境乾淨整潔又舒適" onchange="updateReview()">
                     <div class="option-text">
                         <span class="main-label">環境質感</span>
                         <span class="sub-label">乾淨整潔、無塵</span>
@@ -299,8 +364,101 @@
                     <div class="check-icon"></div>
                 </label>
             </div>
+
+            <!-- 自動生成的評論卡片 -->
+            <div class="result-box">
+                <div class="result-title">✨ 您的專屬五星好評已生成：</div>
+                <div class="review-text" id="reviewContent">載文中...</div>
+                <button class="btn-primary" onclick="copyAndRedirect()">
+                    📋 複製評論並前往 Google 留下 5 星
+                </button>
+                <div class="detected-store" id="storeName">正在為您匹配最近的樂釜分店...</div>
+            </div>
+
+            <!-- Line 會員導流卡片 -->
+            <div class="line-card">
+                <div class="line-title">🎁 樂釜專屬會員召集令</div>
+                <div class="line-desc">加入 LINE 官方帳號，即刻領取【美食招待券】！</div>
+                <!-- 💡 請將下面的 LINE 網址替換為樂釜實際的 LINE 官方帳號連結 -->
+                <a href="https://line.me/R/ti/p/@lovehotpot" target="_blank" class="btn-line">
+                    💬 一鍵加入 LINE 領取好禮
+                </a>
+            </div>
         </div>
     </div>
 
+    <script>
+        // 樂釜分店 Google 評論預設連結對照表 (請根據實際分店 Google Map 連結微調)
+        const STORES = {
+            'Luzhou': { name: '樂釜極上鍋物 (蘆洲店)', url: 'https://maps.app.goo.gl/xxxx' },
+            'Sanchong': { name: '樂釜極上鍋物 (三重店)', url: 'https://maps.app.goo.gl/yyyy' },
+            'Default': { name: '樂釜極上鍋物', url: 'https://www.google.com/search?q=樂釜極上鍋物' }
+        };
+
+        let currentStoreUrl = STORES.Default.url;
+
+        // 1. 動態生成評論文案
+        function updateReview() {
+            const selectedFood = document.querySelector('input[name="food"]:checked');
+            const selectedExp = document.querySelector('input[name="exp"]:checked');
+
+            const foodName = selectedFood.value;
+            const foodDesc = selectedFood.getAttribute('data-desc');
+            const expDesc = selectedExp.getAttribute('data-desc');
+
+            const templates = [
+                `今天來樂釜用餐體驗太棒了！點了${foodName}，${foodDesc}。整體${expDesc}，絕對會再訪！`,
+                `超推樂釜的${foodName}！${foodDesc}，而且${expDesc}，是聚餐的首選火鍋店！`,
+                `第一次來樂釜就被圈粉，${foodName}${foodDesc}，加上${expDesc}，給五星好評都不夠！`
+            ];
+
+            // 隨機選一個句型讓評論更自然
+            const randomText = templates[Math.floor(Math.random() * templates.length)];
+            document.getElementById('reviewContent').innerText = randomText;
+        }
+
+        // 2. 智慧判斷 IP 匹配分店
+        async function detectLocation() {
+            try {
+                const response = await fetch('https://ipapi.co/json/');
+                const data = await response.json();
+                const city = data.city || '';
+
+                const storeElement = document.getElementById('storeName');
+
+                // 簡易判定地理位置導流 (可延伸具體區域)
+                if (city.includes('Luzhou') || city.includes('New Taipei')) {
+                    storeElement.innerText = `已為您定位：${STORES.Default.name}`;
+                    currentStoreUrl = STORES.Default.url;
+                } else {
+                    storeElement.innerText = `自動導向：${STORES.Default.name}`;
+                    currentStoreUrl = STORES.Default.url;
+                }
+            } catch (e) {
+                document.getElementById('storeName').innerText = '準備為您前往 Google 評論...';
+            }
+        }
+
+        // 3. 一鍵複製並跳轉 Google 評論
+        function copyAndRedirect() {
+            const text = document.getElementById('reviewContent').innerText;
+            
+            // 複製到剪貼簿
+            navigator.clipboard.writeText(text).then(() => {
+                alert('已為您複製好評文案！即將跳轉至 Google 評論頁面，直接貼上即可～');
+                window.open(currentStoreUrl, '_blank');
+            }).catch(err => {
+                // 相容性處理
+                alert('請手動複製文字後前往評論～');
+                window.open(currentStoreUrl, '_blank');
+            });
+        }
+
+        // 初始化
+        window.onload = function() {
+            updateReview();
+            detectLocation();
+        };
+    </script>
 </body>
 </html>
