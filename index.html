@@ -5,250 +5,300 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>樂釜極上鍋物</title>
     <style>
-        /* 1. 核心色彩變數與重設 */
         :root {
-            --bg-color: #F8FAFC;          /* 輕盈白灰背景 */
-            --card-bg: #FFFFFF;           /* 純白卡片容器 */
-            --primary-blue: #11184B;      /* 樂釜主色藍 */
-            --secondary-blue: #2B4C7E;    /* 次要品牌藍 */
-            --accent-blue: #3B82F6;       /* 選取狀態藍 */
-            --text-main: #1E293B;         /* 主要文字黑灰 */
-            --text-sub: #64748B;          /* 次要文字中灰 */
-            --border-color: #E2E8F0;      /* 淡灰邊框 */
-            --selected-bg: #EFF6FF;       /* 選取時的淡藍背景 */
+            --primary-navy: #11184B;       /* 樂釜沉穩深藍 */
+            --accent-blue: #1E6BFF;        /* 亮點藍 */
+            --light-blue-bg: #F0F5FF;     /* 選取時的輕奢藍 */
+            --bg-gradient: linear-gradient(135deg, #F8FAFC 0%, #E2E8F0 100%);
+            --card-shadow: 0 20px 40px rgba(15, 37, 55, 0.08);
+            --text-title: #0F172A;
+            --text-sub: #64748B;
+            --border-default: #E2E8F0;
         }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
-            background-color: var(--bg-color);
-            color: var(--text-main);
+            background: var(--bg-gradient);
+            color: var(--text-title);
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            padding: 20px 15px;
+            padding: 24px 16px;
         }
 
-        /* 2. 主容器架構 */
         .container {
             width: 100%;
-            max-width: 480px;
-            background: var(--card-bg);
-            border-radius: 20px;
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
-            padding: 30px 24px;
-            border: 1px solid var(--border-color);
+            max-width: 440px;
+            background: #FFFFFF;
+            border-radius: 28px;
+            box-shadow: var(--card-shadow);
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
         }
 
-        /* 3. Header & Logo 區塊 */
+        /* 頂部放大的品牌 Hero 視覺區塊 */
+        .hero-banner {
+            width: 100%;
+            height: 180px;
+            position: relative;
+            background-color: var(--primary-navy);
+            overflow: hidden;
+        }
+
+        .hero-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .hero-banner:hover .hero-img {
+            transform: scale(1.03);
+        }
+
+        /* 主內容區塊 */
+        .content {
+            padding: 28px 24px 32px;
+        }
+
         .header {
             text-align: center;
             margin-bottom: 28px;
         }
 
-        .avatar-wrapper {
-            width: 88px;
-            height: 88px;
-            margin: 0 auto 16px;
-            border-radius: 50%;
-            padding: 3px;
-            background: linear-gradient(135deg, var(--primary-blue), #60A5FA);
-            box-shadow: 0 4px 12px rgba(26, 54, 93, 0.15);
-        }
-
-        .avatar-img {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            object-fit: cover;
-            background-color: #fff;
+        .brand-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            background: rgba(30, 107, 255, 0.08);
+            color: var(--accent-blue);
+            font-size: 11px;
+            font-weight: 700;
+            border-radius: 100px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 8px;
         }
 
         .title {
-            font-size: 22px;
-            font-weight: 700;
-            color: var(--primary-blue);
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--primary-navy);
+            letter-spacing: -0.5px;
             margin-bottom: 6px;
-            letter-spacing: 0.5px;
         }
 
         .subtitle {
             font-size: 13px;
             color: var(--text-sub);
+            letter-spacing: 0.2px;
         }
 
-        /* 4. 問題區塊 */
+        /* 問題區塊標題 */
         .section-title {
             font-size: 15px;
             font-weight: 700;
-            color: var(--primary-blue);
-            margin: 24px 0 12px;
+            color: var(--primary-navy);
+            margin: 24px 0 14px;
             display: flex;
+            justify-content: space-between;
             align-items: center;
         }
 
-        .section-title::before {
-            content: '';
-            display: inline-block;
-            width: 4px;
-            height: 16px;
-            background-color: var(--secondary-blue);
-            margin-right: 8px;
-            border-radius: 2px;
+        .section-title .hint {
+            font-size: 11px;
+            color: #94A3B8;
+            font-weight: 500;
+            background: #F1F5F9;
+            padding: 2px 8px;
+            border-radius: 6px;
         }
 
-        .section-title span {
-            font-size: 12px;
-            font-weight: 400;
-            color: var(--text-sub);
-            margin-left: 6px;
-        }
-
-        /* 5. 選項卡片設計 */
+        /* 選項群組 */
         .option-group {
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 12px;
         }
 
+        /* 現代 UI 選項卡片 */
         .option-card {
+            position: relative;
             display: flex;
             align-items: center;
-            padding: 14px 16px;
-            border-radius: 12px;
-            border: 1.5px solid var(--border-color);
-            background-color: #FFFFFF;
+            justify-content: space-between;
+            padding: 16px 18px;
+            border-radius: 16px;
+            border: 2px solid var(--border-default);
+            background: #FFFFFF;
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .option-card:hover {
-            border-color: var(--secondary-blue);
-            background-color: #F8FAFC;
+            border-color: #CBD5E1;
+            transform: translateY(-1px);
         }
 
-        /* 隱藏原生 radio 按鈕 */
         .option-card input[type="radio"] {
             display: none;
         }
 
-        /* 客製化 Radio Circle */
-        .radio-custom {
-            width: 18px;
-            height: 18px;
-            border: 2px solid #94A3B8;
+        .option-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .main-label {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--text-title);
+            margin-bottom: 2px;
+        }
+
+        .sub-label {
+            font-size: 12px;
+            color: var(--text-sub);
+        }
+
+        /* 客製選取 Icon */
+        .check-icon {
+            width: 22px;
+            height: 22px;
             border-radius: 50%;
-            margin-right: 12px;
-            position: relative;
-            flex-shrink: 0;
+            border: 2px solid #CBD5E1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             transition: all 0.2s ease;
         }
 
-        /* 被選取時的樣式 */
-        .option-card input[type="radio"]:checked + .radio-custom {
-            border-color: var(--accent-blue);
-            background-color: var(--accent-blue);
-        }
-
-        .option-card input[type="radio"]:checked + .radio-custom::after {
+        .check-icon::after {
             content: '';
-            width: 6px;
-            height: 6px;
-            background-color: #FFFFFF;
+            width: 8px;
+            height: 8px;
             border-radius: 50%;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
+            background: #FFFFFF;
+            opacity: 0;
+            transform: scale(0);
+            transition: all 0.2s ease;
         }
 
-        .option-card input[type="radio"]:checked ~ .option-label {
-            color: var(--primary-blue);
-            font-weight: 600;
-        }
-
+        /* 選中狀態樣式 (Active) */
         .option-card:has(input[type="radio"]:checked) {
             border-color: var(--accent-blue);
-            background-color: var(--selected-bg);
+            background-color: var(--light-blue-bg);
+            box-shadow: 0 4px 12px rgba(30, 107, 255, 0.12);
         }
 
-        .option-label {
-            font-size: 14px;
-            color: var(--text-main);
+        .option-card input[type="radio"]:checked ~ .check-icon {
+            background-color: var(--accent-blue);
+            border-color: var(--accent-blue);
         }
 
-        .option-desc {
-            color: var(--text-sub);
-            font-size: 13px;
+        .option-card input[type="radio"]:checked ~ .check-icon::after {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .option-card input[type="radio"]:checked ~ .option-text .main-label {
+            color: var(--accent-blue);
         }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <!-- 品牌 Header -->
-        <div class="header">
-            <div class="avatar-wrapper">
-                <!-- 💡 替換圖片說明：把下面的 image.png 換成你 uploaded 的樂釜 Logo 或圖片網址 -->
-                <img src="image.png" alt="樂釜極上鍋物 Logo" class="avatar-img">
+        <!-- 放大的頂部品牌 Banner 圖 (可自行更換 image.png 檔名) -->
+        <div class="hero-banner">
+            <img src="image.png" alt="樂釜美味視覺" class="hero-img">
+        </div>
+
+        <div class="content">
+            <!-- 品牌 Header -->
+            <div class="header">
+                <span class="brand-badge">Love Hotpot</span>
+                <h1 class="title">樂釜極上鍋物</h1>
+                <p class="subtitle">1秒勾選，拼裝你的樂釜專屬美味記憶</p>
             </div>
-            <h1 class="title">樂釜極上鍋物</h1>
-            <p class="subtitle">1秒勾選，拼裝你的樂釜專屬美味記憶</p>
-        </div>
 
-        <!-- 問題 1 -->
-        <div class="section-title">
-            今日吃了什麼美味？ <span>(單選)</span>
-        </div>
-        <div class="option-group">
-            <label class="option-card">
-                <input type="radio" name="food" checked>
-                <span class="radio-custom"></span>
-                <span class="option-label">極上黑毛和牛 <span class="option-desc">（入口即化）</span></span>
-            </label>
-            <label class="option-card">
-                <input type="radio" name="food">
-                <span class="radio-custom"></span>
-                <span class="option-label">鮮活蛤蜊海鮮 <span class="option-desc">（飽滿肥美）</span></span>
-            </label>
-            <label class="option-card">
-                <input type="radio" name="food">
-                <span class="radio-custom"></span>
-                <span class="option-label">頂級雪花牛 <span class="option-desc">（肉厚多汁）</span></span>
-            </label>
-            <label class="option-card">
-                <input type="radio" name="food">
-                <span class="radio-custom"></span>
-                <span class="option-label">和牛美味拼盤 <span class="option-desc">（湯頭甘甜）</span></span>
-            </label>
-        </div>
+            <!-- 問題 1 -->
+            <div class="section-title">
+                今日吃了什麼美味？
+                <span class="hint">單選</span>
+            </div>
+            <div class="option-group">
+                <label class="option-card">
+                    <input type="radio" name="food" checked>
+                    <div class="option-text">
+                        <span class="main-label">極上黑毛和牛</span>
+                        <span class="sub-label">入口即化</span>
+                    </div>
+                    <div class="check-icon"></div>
+                </label>
+                
+                <label class="option-card">
+                    <input type="radio" name="food">
+                    <div class="option-text">
+                        <span class="main-label">鮮活蛤蜊海鮮</span>
+                        <span class="sub-label">飽滿肥美</span>
+                    </div>
+                    <div class="check-icon"></div>
+                </label>
 
-        <!-- 問題 2 -->
-        <div class="section-title">
-            最滿意的體驗是？ <span>(單選)</span>
-        </div>
-        <div class="option-group">
-            <label class="option-card">
-                <input type="radio" name="experience" checked>
-                <span class="radio-custom"></span>
-                <span class="option-label">服務貼心 <span class="option-desc">（親切、主動加湯）</span></span>
-            </label>
-            <label class="option-card">
-                <input type="radio" name="experience">
-                <span class="radio-custom"></span>
-                <span class="option-label">環境質感 <span class="option-desc">（乾淨整潔、無塵）</span></span>
-            </label>
+                <label class="option-card">
+                    <input type="radio" name="food">
+                    <div class="option-text">
+                        <span class="main-label">頂級雪花牛</span>
+                        <span class="sub-label">肉厚多汁</span>
+                    </div>
+                    <div class="check-icon"></div>
+                </label>
+
+                <label class="option-card">
+                    <input type="radio" name="food">
+                    <div class="option-text">
+                        <span class="main-label">和牛美味拼盤</span>
+                        <span class="sub-label">湯頭甘甜</span>
+                    </div>
+                    <div class="check-icon"></div>
+                </label>
+            </div>
+
+            <!-- 問題 2 -->
+            <div class="section-title">
+                最滿意的體驗是？
+                <span class="hint">單選</span>
+            </div>
+            <div class="option-group">
+                <label class="option-card">
+                    <input type="radio" name="experience" checked>
+                    <div class="option-text">
+                        <span class="main-label">服務貼心</span>
+                        <span class="sub-label">親切、主動加湯</span>
+                    </div>
+                    <div class="check-icon"></div>
+                </label>
+
+                <label class="option-card">
+                    <input type="radio" name="experience">
+                    <div class="option-text">
+                        <span class="main-label">環境質感</span>
+                        <span class="sub-label">乾淨整潔、無塵</span>
+                    </div>
+                    <div class="check-icon"></div>
+                </label>
+            </div>
         </div>
     </div>
-
-</body>
-</html>
 
 </body>
 </html>
